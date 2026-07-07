@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs'); 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // This handles both Render and your local machine
 
 app.use(express.static('public'));
 app.use(express.json()); 
@@ -93,4 +93,3 @@ app.listen(PORT, () => {
 });
 
 // Change this line in server.js:
-const PORT = process.env.PORT || 3000;
