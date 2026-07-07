@@ -3,8 +3,14 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
+
 app.use(express.static('public'));
-app.use(express.json()); 
+app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.status(200).send('Quiz Maker Server is Live!');
+});
 
 app.post('/api/save-test', (req, res) => {
     const newTest = req.body; 
