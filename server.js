@@ -6,7 +6,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static('public'));
 app.use(express.json()); 
 
-// --- TEST ENDPOINTS ---
 app.post('/api/save-test', (req, res) => {
     const newTest = req.body; 
     newTest.id = Date.now(); 
@@ -44,13 +43,9 @@ app.delete('/api/delete-test/:id', (req, res) => {
     }
 });
 
-// --- NEW/UPDATED: SCORE ENDPOINTS ---
 app.post('/api/save-score', (req, res) => {
     const scoreData = req.body;
-    
-    // NEW: Assign a unique ID to the score based on the exact millisecond
     scoreData.id = Date.now(); 
-    
     let scores = [];
     if (fs.existsSync('scores.json')) {
         const existingScores = fs.readFileSync('scores.json', 'utf8');
@@ -71,16 +66,12 @@ app.get('/api/get-scores', (req, res) => {
     }
 });
 
-// NEW: Delete a specific score
 app.delete('/api/delete-score/:id', (req, res) => {
     const scoreId = parseInt(req.params.id); 
     if (fs.existsSync('scores.json')) {
         const existingScores = fs.readFileSync('scores.json', 'utf8');
         let scores = JSON.parse(existingScores);
-        
-        // Filter out the deleted score
         const updatedScores = scores.filter(s => s.id !== scoreId);
-        
         fs.writeFileSync('scores.json', JSON.stringify(updatedScores, null, 2));
         res.json({ message: "Score deleted successfully!" });
     } else {
@@ -89,7 +80,5 @@ app.delete('/api/delete-score/:id', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running! Open http://localhost:${PORT} in your web browser.`);
+    console.log(`Server is running on port ${PORT}`);
 });
-
-// Change this line in server.js:
