@@ -1,11 +1,91 @@
 const express = require('express');
+const fs = require('fs'); 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-    res.status(200).send('Test Server is Working Perfectly!');
+// Serve your frontend files from the public folder
+app.use(express.static('public'));
+app.use(express.json()); 
+
+// Save a newly created test
+app.post('/api/save-test', (req, res) => {
+    const newTest = req.body; 
+    newTest.id = Date.now(); 
+    let allTests = [];
+    if (fs.existsSync('database.json')) {
+        const existingData = fs.readFileSync('database.json', 'utf8');
+        allTests = JSON.parse(existingData);
+    }
+    allTests.push(newTest);
+    fs.writeFileSync('database.json', JSON.stringify(allTests, null, 2));
+    console.log(`Test "${newTest.title}" saved successfully!`);
+    res.json({ message: "Test permanently saved to the database!" });
+});
+
+// Fetch all available tests
+app.get('/api/get-tests', (req, res) => {
+    if (fs.existsSync('database.json')) {
+        const existingData = fs.readFileSync('database.json', 'utf8');
+        res.json(JSON.parse(existingData));
+    } else {
+        res.json([]);
+    }
+});
+
+// Delete a test by ID
+app.delete('/api/delete-test/:id', (req, res) => {
+    const testId = parseInt(req.params.id); 
+    if (fs.existsSync('database.json')) {
+        const existingData = fs.readFileSync('database.json', 'utf8');
+        let tests = JSON.parse(existingData);
+        const updatedTests = tests.filter(test => test.id !== testId);
+        fs.writeFileSync('database.json', JSON.stringify(updatedTests, null, 2));
+        console.log(`Test ID ${testId} was deleted.`);
+        res.json({ message: "Test deleted successfully!" });
+    } else {
+        res.json({ message: "No database found." });
+    }
+});
+
+// Save a student score
+app.post('/api/save-score', (req, res) => {
+    const scoreData = req.body;
+    scoreData.id = Date.now(); 
+    let scores = [];
+    if (fs.existsSync('scores.json')) {
+        const existingScores = fs.readFileSync('scores.json', 'utf8');
+        scores = JSON.parse(existingScores);
+    }
+    scores.push(scoreData);
+    fs.writeFileSync('scores.json', JSON.stringify(scores, null, 2));
+    console.log(`${scoreData.studentName} just scored ${scoreData.percentage}%`);
+    res.json({ message: "Score saved to database!" });
+});
+
+// Fetch all student scores
+app.get('/api/get-scores', (req, res) => {
+    if (fs.existsSync('scores.json')) {
+        const scores = fs.readFileSync('scores.json', 'utf8');
+        res.send(scores);
+    } else {
+        res.json([]);
+    }
+});
+
+// Delete a score record
+app.delete('/api/delete-score/:id', (req, res) => {
+    const scoreId = parseInt(req.params.id); 
+    if (fs.existsSync('scores.json')) {
+        const existingScores = fs.readFileSync('scores.json', 'utf8');
+        let scores = JSON.parse(existingScores);
+        const updatedScores = scores.filter(s => s.id !== scoreId);
+        fs.writeFileSync('scores.json', JSON.stringify(updatedScores, null, 2));
+        res.json({ message: "Score deleted successfully!" });
+    } else {
+        res.json({ message: "No score database found." });
+    }
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
