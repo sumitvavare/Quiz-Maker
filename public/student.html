@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Quiz Maker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Portal</h1>
+            <p>Select a test to begin</p>
+        </header>
+
+        <section id="testList" class="test-builder">
+            <h2>Available Tests</h2>
+            <div id="testsContainer">
+                <p>Loading tests...</p>
+            </div>
+        </section>
+
+        <section id="activeTestContainer" style="display: none;">
+            </section>
+
+        <section id="resultsContainer" class="test-builder" style="display: none; text-align: center;">
+            <h2>Test Complete!</h2>
+            
+            <div id="scoreDisplay" style="font-size: 64px; font-weight: bold; margin: 20px 0; color: #007BFF;"></div>
+            <h3 id="scoreMessage"></h3>
+            
+            <button onclick="window.location.reload()" class="primary-btn" style="margin-top: 20px;">Return to Dashboard</button>
+        </section>
+    </div>
+
+    <script src="student-script.js"></script>
+</body>
+</html>

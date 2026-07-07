@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Quiz Maker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Teacher Dashboard</h1>
+            <p>Create and manage tests for your students</p>
+            <a href="student.html" target="_blank" style="color: #007BFF; text-decoration: none; font-weight: bold;">
+        🔗 Open Student Portal in New Tab
+            </a>
+        </header>
+
+        <section class="test-builder">
+            <h2>Create New Test</h2>
+            <input type="text" id="testTitle" placeholder="Enter Test Title (e.g., Midterm Exam)">
+            <input type="number" id="timeLimit" placeholder="Time limit in minutes (e.g. 15)" min="1">
+            
+            <div id="questionsContainer">
+                <div class="question-box">
+                    <h3>Question 1</h3>
+                    <input type="text" class="questionText" placeholder="Type your question here...">
+                    
+                    <div class="options">
+                        <input type="text" placeholder="Option A">
+                        <input type="text" placeholder="Option B">
+                        <input type="text" placeholder="Option C">
+                        <input type="text" placeholder="Option D">
+                        
+                        <div style="margin-top: 15px; font-weight: bold;">
+                            <label>Which option is correct? </label>
+                            <select class="correctAnswer">
+                                <option value="A">Option A</option>
+                                <option value="B">Option B</option>
+                                <option value="C">Option C</option>
+                                <option value="D">Option D</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="addQuestionBtn">Add Another Question</button>
+            <button id="saveTestBtn" class="primary-btn">Save Entire Test</button>
+        </section>
+
+        <section class="test-builder" style="margin-top: 40px; border-top: 4px solid #dc3545;">
+            <h2>Manage Active Tests</h2>
+            <div id="manageTestsContainer" style="margin-top: 20px;">
+                <p>Loading tests...</p>
+            </div>
+        </section>
+
+        <section class="test-builder" style="margin-top: 40px; border-top: 4px solid #28a745;">
+            <h2>Student Scores</h2>
+            <button id="loadScoresBtn" class="primary-btn" style="background-color: #28a745;">View Latest Scores</button>
+            <div id="scoresContainer" style="margin-top: 20px;"></div>
+        </section>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
