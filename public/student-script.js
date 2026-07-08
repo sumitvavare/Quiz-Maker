@@ -187,3 +187,58 @@ async function submitTest() {
 }
 
 loadTests();
+async function verifyAndStartTest() {
+    const nameInput = document.getElementById('student-name-input').value.trim();
+    const errorElement = document.getElementById('error-message');
+
+    if (!nameInput) {
+        errorElement.textContent = "Please enter your name to continue.";
+        return;
+    }
+
+    const startBtn = document.getElementById('start-test-btn');
+    startBtn.innerText = "Checking...";
+    startBtn.disabled = true;
+
+    try {
+        const response = await fetch('/api/get-scores');
+        const existingScores = await response.json();
+
+        const hasAlreadyTaken = existingScores.some(
+            score => score.studentName.toLowerCase() === nameInput.toLowerCase()
+        );
+
+        if (hasAlreadyTaken) {
+            errorElement.textContent = "A student with this name has already completed the test. Please use your full name.";
+            startBtn.innerText = "Start Test";
+            startBtn.disabled = false;
+            return;
+        }
+
+        // Hide popup and show the main quiz container
+        errorElement.textContent = "";
+        document.getElementById('name-modal').style.display = 'none';
+        document.getElementById('main-quiz-ui').style.display = 'block';
+        
+        // Find your global name variable from the top of your code and update it
+        // (In your screenshot, it was called currentStudentName)
+        currentStudentName = nameInput;
+        
+        // Update the name display on the screen
+        const nameDisplay = document.getElementById('student-name-display');
+        if (nameDisplay) {
+            nameDisplay.innerText = `Student: ${nameInput}`;
+        }
+
+        // Trigger the tests to load on the screen now that they are allowed in
+        if (typeof loadTests === "function") {
+            loadTests();
+        }
+
+    } catch (error) {
+        console.error("Database error:", error);
+        errorElement.textContent = "Failed to connect to the server. Please try again.";
+        startBtn.innerText = "Start Test";
+        startBtn.disabled = false;
+    }
+}
