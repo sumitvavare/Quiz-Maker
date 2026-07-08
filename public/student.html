@@ -8,6 +8,14 @@
 </head>
 <body>
     <div id="name-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Welcome to the Quiz</h2>
+        <p>Please enter your full name to begin.</p>
+        <input type="text" id="student-name-input" placeholder="e.g., First and Last Name" />
+        <p id="error-message" class="error-text"></p>
+        <button id="start-test-btn" onclick="verifyAndStartTest()">Start Test</button>
+    </div>
+
     <div class="container">
         <header>
             <h1>Student Portal</h1>
