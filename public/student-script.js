@@ -187,3 +187,49 @@ async function submitTest() {
 }
 
 loadTests();
+
+async function verifyAndStartTest() {
+    const nameInput = document.getElementById('student-name-input').value.trim();
+    const errorElement = document.getElementById('error-message');
+
+    if (!nameInput) {
+        errorElement.textContent = "Please enter your name to continue.";
+        return;
+    }
+
+    const startBtn = document.getElementById('start-test-btn');
+    startBtn.innerText = "Checking...";
+    startBtn.disabled = true;
+
+    try {
+        const response = await fetch('/api/get-scores');
+        const existingScores = await response.json();
+
+        const hasAlreadyTaken = existingScores.some(
+            score => score.studentName.toLowerCase() === nameInput.toLowerCase()
+        );
+
+        if (hasAlreadyTaken) {
+            errorElement.textContent = "A student with this name has already completed the test. Please use your full name.";
+            startBtn.innerText = "Start Test";
+            startBtn.disabled = false;
+            return;
+        }
+
+        // If the name is new, hide the popup!
+        errorElement.textContent = "";
+        document.getElementById('name-modal').style.display = 'none';
+        
+        // ---> IMPORTANT: CALL YOUR ACTUAL START QUIZ FUNCTION HERE <---
+        // For example, if your old start function was startQuiz(), uncomment the line below:
+        // startQuiz(nameInput);
+        
+        console.log(`Starting test for ${nameInput}`);
+
+    } catch (error) {
+        console.error("Database error:", error);
+        errorElement.textContent = "Failed to connect to the server. Please try again.";
+        startBtn.innerText = "Start Test";
+        startBtn.disabled = false;
+    }
+}
